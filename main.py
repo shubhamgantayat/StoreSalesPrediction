@@ -12,7 +12,7 @@ CORS(app)
 @app.route('/', methods=['GET'])
 @cross_origin()
 def home():
-    return "Flask app is running"
+    return "Flask app is running and i am changing something."
 
 
 if __name__ == '__main__':
