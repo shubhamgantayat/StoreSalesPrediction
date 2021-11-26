@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Input</title>
+  </head>
+  <body>
+    <div class="input">
+      <form class="take_input" action = "/train" method="POST" enctype="multipart/form-data">
+        <input type="file" id="file" name="file">
+        <input type="submit">
+      </form>
+    </div>
+  </body>
+</html>
