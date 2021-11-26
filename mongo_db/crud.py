@@ -60,8 +60,6 @@ class Operations:
             self.result = "inserted a record"
             self.lg.log("info", self.result)
             return {"status": True, "message": "Successfully registered"}
-        except pymongo.errors.DuplicateKeyError:
-            return {"status": True, "message": "User already exists"}
         except Exception as e:
             self.result = str(e)
             self.lg.log("error", self.result)
@@ -112,9 +110,11 @@ class Operations:
             table.insert_many(data)
             self.result = "inserted " + str(len(records) - 1) + " records"
             self.lg.log("info", self.result)
+            return {"status": True, "message": self.result}
         except Exception as e:
             self.result = str(e)
             self.lg.log("error", self.result)
+            return {"status": True, "message": "Internal Error"}
 
     def update(self, table_name, condition, new_val):
 

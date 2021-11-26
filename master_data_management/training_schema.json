@@ -1,0 +1,18 @@
+{
+  "NumberOfColumns": 12,
+  "NullColumns": ["Item_Weight", "Outlet_Size"],
+  "ColData" : {
+    "Item_Identifier": "string",
+    "Item_Weight": "float",
+    "Item_Fat_Content": "string",
+    "Item_Visibility": "float",
+    "Item_Type": "string",
+    "Item_MRP": "float",
+    "Outlet_Identifier": "string",
+    "Outlet_Establishment_Year": "int",
+    "Outlet_Size": "string",
+    "Outlet_Location_Type": "string",
+    "Outlet_Type": "string",
+    "Item_Outlet_Sales": "float"
+  }
+}
