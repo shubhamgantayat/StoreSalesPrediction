@@ -151,7 +151,7 @@ def predict_data():
 
 if __name__ == '__main__':
     config.logger.log("INFO", "App starting...")
-    host = '127.0.0.1'
+    host = '0.0.0.0'
     port = int(os.getenv("PORT", 5000))
     # httpd = simple_server.make_server(host=host, port=port, app=app)
     # httpd.serve_forever()
