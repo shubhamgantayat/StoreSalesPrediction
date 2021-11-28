@@ -115,11 +115,11 @@ def predict_data():
         if request.method == "POST":
             data = {
                 "Item_Identifier": [request.form["Item_Identifier"]],
-                "Item_Weight": [request.form["Item_Weight"]],
+                "Item_Weight": [float(request.form["Item_Weight"])],
                 "Item_Fat_Content": [request.form["Item_Fat_Content"]],
-                "Item_Visibility": [request.form["Item_Visibility"]],
+                "Item_Visibility": [float(request.form["Item_Visibility"])],
                 "Item_Type": [request.form["Item_Type"]],
-                "Item_MRP": [request.form["Item_MRP"]],
+                "Item_MRP": [float(request.form["Item_MRP"])],
                 "Outlet_Identifier": [request.form["Outlet_Identifier"]],
                 "Outlet_Establishment_Year": [request.form["Outlet_Establishment_Year"]],
                 "Outlet_Size": [request.form["Outlet_Size"]],

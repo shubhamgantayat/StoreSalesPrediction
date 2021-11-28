@@ -29,7 +29,11 @@ class PredictionDataValidation:
             test_data = pd.read_csv(self.filepath)
             null_columns = test_data.isna().sum()
             null_columns = list(null_columns[null_columns > 0].index)
-            if self.schema['NumberOfColumns'] == len(test_data.columns) and self.schema['NullColumns'] == null_columns:
+            flag = True
+            for nc in null_columns:
+                if nc not in self.schema['NullColumns']:
+                    flag = False
+            if self.schema['NumberOfColumns'] == len(test_data.columns) and flag:
                 col_dtypes = pd.DataFrame(test_data.dtypes, columns=['dtype'])
                 col_dtypes['dtype'] = col_dtypes['dtype'].apply(lambda x:self.map_dtypes[str(x)])
                 if col_dtypes.to_dict()['dtype'] == self.schema['ColData']:
