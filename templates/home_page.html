@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="https://kit.fontawesome.com/bf3a3180f8.js" crossorigin="anonymous"></script>
+
+  <title>Input</title>
+</head>
+
+<body>
+
+  <div class="nav">
+
+
+    <i style="font-size: large; color: aliceblue;" class="fas fa-shopping-bag"></i>
+    <div><h3>Store Sales Prediction</h3></div>
+
+
+    <ul  class="right">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/train-data" class="nav-link">Train Data</a></li>
+    </ul>
+  </div>
+
+  
+  <div class="body">
+    <div class="input1">
+      <form class="take_input" action="/predict-data" method="POST">
+        
+        <div class="para">
+          <div><label>Item Identifier</label></div>
+          <input type="text" name="Item_Identifier" id="Item_Identifier"><br>
+        </div>
+        <div class="para">
+          <div><label>Item Weight</label></div>
+          <input type="number" name="Item_Weight" id="Item_Weight"><br>
+        </div>
+        <div class="para">
+          <div><label>Item Fat Content</label></div>
+          <input type="text" name="Item_Fat_Content" id="Item_Fat_Content"><br>
+        </div>
+        <div class="para">
+          <div><label>Item Visibility</label></div>
+          <input type="number" name="Item_Visibility" id="Item_Visibility"><br>
+        </div>
+        <div class="para">
+          <div><label>Item Type</label></div>
+          <input type="text" name="Item_Type" id="Item_Type"><br>
+        </div>
+        <div class="para">
+          <div><label>Item MRP</label></div>
+          <input type="number" name="Item_MRP" id="Item_MRP"><br>
+        </div>
+        <div class="para">
+          <div><label>Outlet Identifier</label></div>
+          <input type="text" name="Outlet_Identifier" id="Outlet_Identifier"><br>
+        </div>
+        <div class="para">
+          <div><label>Outlet Establishment_Year</label></div>
+          <input type="number" name="Outlet_Establishment_Year" id="Outlet_Establishment_Year"><br>
+        </div>
+        <div class="para">
+          <div><label>Outlet Size</label></div>
+          <input type="text" name="Outlet_Size" id="Outlet_Size"><br>
+        </div>
+        <div class="para">
+          <div><label>Outlet Location Type</label></div>
+          <input type="text" name="Outlet_Location_Type" id="Outlet_Location_Type"><br>
+        </div>
+        <div class="para">
+          <div><label>Outlet Type</label></div>
+          <input type="text" name="Outlet_Type" id="Outlet_Type"><br>
+        </div>
+        <center><input type="submit"></center>
+      </form>
+      <div class="output">
+        <p>
+          <!-- GAnd matrao madhar chpod -->
+          {{results}}
+        </p>
+      </div>
+    </div>
+
+    <br><br>
+    <div class="input2">
+      <form class="take_input" action="/predict-file" method="POST" enctype="multipart/form-data">
+        <label for="file"><strong>Upload Prediction Data:</strong></label><br><br>
+        <input type="file" id="file filec" name="file"><br>
+        <input type="submit" value="Download Prediction"></input>
+      </form>
+    </div>
+
+    
+  </div>
+</body>
+
+</html>

@@ -1,16 +1,53 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <title>Input</title>
-  </head>
-  <body>
-    <div class="input">
-      <form class="take_input" action = "/train" method="POST" enctype="multipart/form-data">
-        <input type="file" id="file" name="file">
-        <input type="submit">
-      </form>
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="https://kit.fontawesome.com/bf3a3180f8.js" crossorigin="anonymous"></script>
+  <title>Input</title>
+</head>
+
+<body>
+  <div class="nav">
+    <i style="font-size: large; color: aliceblue;" class="fas fa-shopping-bag"></i>
+    <div>
+      <h3>Store Sales Prediction</h3>
     </div>
-  </body>
+    <ul class="right">
+      <li><a href="/" class="nav-link">Home</a></li>
+      <li><a href="/train-data" class="nav-link">Train Data</a></li>
+    </ul>
+  </div>
+  <div class="body">
+    <div class="input">
+      <form class="take_input" action="/train" method="POST" enctype="multipart/form-data">
+<br><br>
+        <div class="para">
+          <div><label>Admin Username:</label></div>
+          <input type="text" id="username" name="username"><br>
+        </div>
+        <div class="para">
+          <div><label for="password">Admin Password:</label></div>
+          <input type="text" id="password" name="password"><br>
+        </div>
+        <div class="para">
+          <div><label for="file">Upload Training Data:</label></div>
+          <input type="file" id="file" name="file"><br>
+        </div>
+        <div class="para">
+          <div><label for="email">Email for Notifying:</label></div>
+          <input type="text" id="email" name="email"><br>
+        </div>
+        <center><input type="submit"></center>
+      </form>
+      <div class="output">
+        <p>
+          {{results}}
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+
 </html>

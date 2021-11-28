@@ -20,10 +20,10 @@ class CustomPipeline:
         return col_tf
 
     @staticmethod
-    def total_pipeline():
+    def total_pipeline(n_neighbors=3):
         pipeline = Pipeline([
             ("col_filter", ColumnFilter()),
             ("col_transformer", CustomPipeline().column_pipeline()),
-            ('knn_imputer', KNNImputer())
+            ('knn_imputer', KNNImputer(n_neighbors=n_neighbors))
         ])
         return pipeline

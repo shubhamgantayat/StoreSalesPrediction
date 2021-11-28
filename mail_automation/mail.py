@@ -1,11 +1,13 @@
+import os
 import smtplib
 import ssl
 import config
+from dotenv import load_dotenv
 
 
 class SendMail:
 
-    def __init__(self, sender_email, sender_password, receiver_email, message):
+    def __init__(self, message, receiver_email):
         """
 
         :param sender_email: email of the sender
@@ -16,8 +18,9 @@ class SendMail:
         try:
             self.port = 465
             self.smtp_server = "smtp.gmail.com"
-            self.sender_email = sender_email
-            self.sender_password = sender_password
+            load_dotenv('env/email_credentials.env')
+            self.sender_email = os.getenv("EMAIL")
+            self.sender_password = os.getenv("PASSWORD")
             self.receiver_email = receiver_email
             self.message = message
         except Exception as e:

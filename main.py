@@ -1,5 +1,5 @@
 import pandas as pd
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, send_file
 from wsgiref import simple_server
 import os
 import flask_monitoringdashboard as dashboard
@@ -11,7 +11,14 @@ from training_data_ingestion.data_ingestion_script import TrainingDataIngestion
 from training_data_validation.data_validation_script import TrainingDataValidation
 from training_db_upload.db_upload_script import TrainingDBUpload
 from fetch_from_db.fetch_from_db_script import DBFetch
-from sklearn.model_selection import train_test_split
+from best_model_finder.best_model_finder_script import ModelFinder
+from threading import Thread
+from dotenv import load_dotenv
+from prediction_data_ingestion.data_ingestion_script import PredictionDataIngestion
+from prediction_data_validation.data_validation_script import PredictionDataValidation
+from prediction_db_upload.db_upload_script import PredictionDBUpload
+import datetime
+import tempfile
 
 app = Flask(__name__)
 dashboard.bind(app)
@@ -23,7 +30,7 @@ config.mongo_db = Operations("StoreSalesPrediction", config.logger)
 @app.route('/', methods=['GET'])
 @cross_origin()
 def home():
-    return "Flask app is running"
+    return render_template("home_page.html")
 
 
 @app.route('/train-data', methods=['GET'])
@@ -35,41 +42,119 @@ def render_train_page():
 @app.route('/train', methods=['GET', 'POST'])
 @cross_origin()
 def train():
-    if request.method == 'POST':
-        config.logger.log("INFO", "Data training initiated...")
-        file = request.files['file']
-        ingestion_response = TrainingDataIngestion(file).save_raw_data()
-        if ingestion_response['status'] == 'Success':
-            validation_response = TrainingDataValidation(ingestion_response['filename']).check_columns()
+    try:
+        if request.method == 'POST':
+            config.logger.log("INFO", "Data training initiated...")
+            file = request.files['file']
+            username = request.form['username']
+            password = request.form['password']
+            email = request.form['email']
+            load_dotenv("env/admin_credentials.env")
+            if username != os.getenv("ADMINUSERNAME") or password != os.getenv("ADMINPASSWORD"):
+                return render_template("train_data.html", results="Wrong admin username and password")
+            ingestion_response = TrainingDataIngestion(file).save_raw_data()
+            if ingestion_response['status'] == 'Success':
+                validation_response = TrainingDataValidation(ingestion_response['filename']).check_columns()
+                if validation_response['status'] == 'Success':
+                    upload_response = TrainingDBUpload(validation_response['filename'], 'valid').upload_to_db()
+                    if upload_response['status'] == 'Success':
+                        fetch_response = DBFetch(upload_response['table_name']).fetch_data_from_db()
+                        if fetch_response['status'] == 'Success':
+                            train_data = fetch_response['data']
+                            X = train_data.drop(columns=['Item_Outlet_Sales'])
+                            y = train_data['Item_Outlet_Sales']
+                            model_finder = ModelFinder()
+                            Thread(target=model_finder.fit, args=(X, y, email)).start()
+                            return render_template("train_data.html", results="We will notify you when your model is trained.")
+                elif validation_response['status'] == 'Failure' and validation_response['filename'] is not None:
+                    upload_response = TrainingDBUpload(validation_response['filename'], 'invalid').upload_to_db()
+                else:
+                    config.logger.log("ERROR", "Internal Error Occured")
+        return render_template("train_data.html", results="Training Unuccessful. Invalid Data")
+    except Exception as e:
+        config.logger.log("ERROR", str(e))
+        return render_template("train_data.html", results="Training Unuccessful. Some Internal Error Occured")
+
+
+@app.route('/predict-file', methods=['GET', 'POST'])
+@cross_origin()
+def predict():
+    try:
+        config.logger.log("INFO", "Prediction initiated...")
+        if request.method == "POST":
+            file = request.files['file']
+            ingestion_response = PredictionDataIngestion(file).save_raw_data()
+            if ingestion_response['status'] == 'Success':
+                validation_response = PredictionDataValidation(ingestion_response['filename']).check_columns()
+                if validation_response['status'] == 'Success':
+                    upload_response = PredictionDBUpload(validation_response['filename'], 'valid').upload_to_db()
+                    if upload_response['status'] == 'Success':
+                        fetch_response = DBFetch(upload_response['table_name']).fetch_data_from_db()
+                        if fetch_response['status'] == 'Success':
+                            X = fetch_response['data']
+                            model_finder = ModelFinder()
+                            predict_response = model_finder.predict(X)
+                            if predict_response['status'] == "Success":
+                                pred = predict_response['pred']
+                                df = pd.DataFrame().from_dict({"Item_Outlet_Sales": pred})
+                                # temp = tempfile.NamedTemporaryFile(suffix='.csv', dir='predictions/')
+                                df.to_csv('predictions/file.csv', index=False)
+                                # df.to_csv(temp.name, index=False)
+                                return send_file('predictions/file.csv')
+        return render_template("home_page.html", results="Prediction Unsuccessful")
+    except Exception as e:
+        config.logger.log("ERROR", str(e))
+        return render_template("home_page.html", results="Internal Error Occured")
+
+
+@app.route('/predict-data', methods=['GET', 'POST'])
+@cross_origin()
+def predict_data():
+    try:
+        config.logger.log("INFO", "Prediction initiated...")
+        if request.method == "POST":
+            data = {
+                "Item_Identifier": [request.form["Item_Identifier"]],
+                "Item_Weight": [request.form["Item_Weight"]],
+                "Item_Fat_Content": [request.form["Item_Fat_Content"]],
+                "Item_Visibility": [request.form["Item_Visibility"]],
+                "Item_Type": [request.form["Item_Type"]],
+                "Item_MRP": [request.form["Item_MRP"]],
+                "Outlet_Identifier": [request.form["Outlet_Identifier"]],
+                "Outlet_Establishment_Year": [request.form["Outlet_Establishment_Year"]],
+                "Outlet_Size": [request.form["Outlet_Size"]],
+                "Outlet_Location_Type": [request.form["Outlet_Location_Type"]],
+                "Outlet_Type": [request.form["Outlet_Type"]]
+            }
+            folder_path = 'prediction_raw_files'
+            filename = 'prediction_raw_data_' + str(datetime.datetime.now().strftime("%Y%m%d%H%M%S")) + ".csv"
+            filepath = os.path.join(folder_path, filename)
+            test_data = pd.DataFrame.from_dict(data)
+            test_data.to_csv(filepath, index=False)
+            validation_response = PredictionDataValidation(filename).check_columns()
             if validation_response['status'] == 'Success':
-                upload_response = TrainingDBUpload(validation_response['filename'], 'valid').upload_to_db()
+                upload_response = PredictionDBUpload(validation_response['filename'], 'valid').upload_to_db()
                 if upload_response['status'] == 'Success':
                     fetch_response = DBFetch(upload_response['table_name']).fetch_data_from_db()
                     if fetch_response['status'] == 'Success':
-                        train_data = fetch_response['data']
-                        X = train_data.drop(columns=['Item_Outlet_Sales'])
-                        y = train_data['Item_Outlet_Sales']
-                        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-            elif validation_response['status'] == 'Failure' and validation_response['filename'] is not None:
-                upload_response = TrainingDBUpload(validation_response['filename'], 'invalid').upload_to_db()
-            else:
-                config.logger.log("ERROR", "Internal Error Occured")
-    return "Training Successful"
-
-
-@app.route('/predict', methods=['GET', 'POST'])
-@cross_origin()
-def predict():
-    config.logger.log("INFO", "Prediction initiated...")
-    return "Prediction Successful"
+                        X = fetch_response['data']
+                        model_finder = ModelFinder()
+                        predict_response = model_finder.predict(X)
+                        if predict_response['status'] == "Success":
+                            pred = predict_response['pred']
+                            return render_template("home_page.html", results=str(pred[0]))
+        return render_template("home_page.html", results="Prediction Unsuccessful")
+    except Exception as e:
+        config.logger.log("ERROR", str(e))
+        return render_template("home_page.html", results="Internal Error Occured")
 
 
 if __name__ == '__main__':
     config.logger.log("INFO", "App starting...")
-    host = '0.0.0.0'
+    host = '127.0.0.1'
     port = int(os.getenv("PORT", 5000))
-    httpd = simple_server.make_server(host=host, port=port, app=app)
-    httpd.serve_forever()
+    # httpd = simple_server.make_server(host=host, port=port, app=app)
+    # httpd.serve_forever()
+    app.run(host=host, port=port, debug=True)
 
 

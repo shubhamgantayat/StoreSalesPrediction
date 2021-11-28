@@ -1,9 +1,131 @@
 body{
-  background-image: linear-gradient(to right, red , yellow);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 500;
+  padding: 0%;
+  margin: auto;
+  /* background-image: linear-gradient(to right, rgb(70, 52, 52) , rgb(209, 209, 168)); */
+  /* background-color: rgb(216, 22, 22); */
+  background: url('bg3.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.nav{
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  
+}
+.nav i{
+  padding: 20px;
+}
+.right{
+  /* float:right; */
+}
+h3{
+  margin: auto;
+  text-align: center;
+  font-size: 1rem;
+  padding: 21px;
 }
 
-.input {
+.nav {
+  margin: 0%;
+  padding: 0%;
+  background: #000;
+  height: 60px; 
+}
+.nav ul{
+  margin: 0%;
+  padding: 0% 5%;
+}
+
+.nav li {
+  display: inline-block;
+  list-style: none;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 25px;
+}
+.nav li:hover {
+  background: rgb(69, 61, 50);
+  transition: background .3s;
+}
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+
+.body{
+  /* margin: auto; */
+  margin: 25px;
+  padding: 0%;
   display: flex;
+  flex-direction:column;
+  flex-wrap: nowrap;
+  
+}
+.input{
+  
+  margin: auto ;
+  width: 700px;
+  border: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 10px;
+  padding: 20px ;
+  background-color: rgba(255, 255, 255, .45);
+}
+
+.input1{
+  margin: auto;
+  border: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 10px;
+  padding: 20px ;
+  background-color: rgba(255, 255, 255, .45);
+}
+.input2{
+  margin: auto;
+  height: 125px;
+  position: relative;
   justify-content: center;
-  margin-top: 50px;
+  width: 350px;
+  text-align: center;
+  border: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 10px;
+  padding: 20px ;
+  background-color: rgba(255, 255, 255, .45);
+}
+.input2 form{
+  /* height: 300px; */
+}
+.output{
+  margin: auto;
+  width: 500px;
+  text-align: center;
+  border: 2px solid rgba(255, 255, 255, 0);
+  border-radius: 10px;
+  padding: 20px ;
+  background-color: rgba(255, 255, 255, .45);
+  
+}
+
+.para{
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 500px;
+}
+.para div{
+  width: 85%;
+}
+input{
+  margin: 10px;
+}
+#filec{
+  padding-left: 100px;
+  
+}
+.submit{
+  margin: auto;
 }
