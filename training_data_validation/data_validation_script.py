@@ -27,6 +27,7 @@ class TrainingDataValidation:
     def check_columns(self):
         try:
             train_data = pd.read_csv(self.filepath)
+            os.remove(self.filepath)
             null_columns = train_data.isna().sum()
             null_columns = list(null_columns[null_columns > 0].index)
             flag = True

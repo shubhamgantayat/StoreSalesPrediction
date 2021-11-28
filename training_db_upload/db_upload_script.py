@@ -20,6 +20,7 @@ class TrainingDBUpload:
     def upload_to_db(self):
         try:
             df = pd.read_csv(self.filepath)
+            os.remove(self.filepath)
             table = config.mongo_db.my_db[self.table_name]
             table.insert_many(json.loads(df.to_json(orient='records')))
             config.logger.log("INFO", "Successfully uploaded to db")
