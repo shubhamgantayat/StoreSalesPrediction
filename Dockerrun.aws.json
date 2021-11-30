@@ -1,0 +1,12 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "295721842628.dkr.ecr.ap-south-1.amazonaws.com/flask-app:latest"
+  },
+  "Ports": [
+    {
+      "ContainerPort": 5000,
+      "HostPort": 5000
+    }
+  ]
+}
