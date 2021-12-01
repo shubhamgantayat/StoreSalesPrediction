@@ -133,6 +133,7 @@ def predict_data():
             filepath = os.path.join(folder_path, filename)
             test_data = pd.DataFrame.from_dict(data)
             test_data.to_csv(filepath, index=False)
+            config.logger.log("INFO", str(os.listdir(filepath)))
             validation_response = PredictionDataValidation(filename).check_columns()
             if validation_response['status'] == 'Success':
                 upload_response = PredictionDBUpload(validation_response['filename'], 'valid').upload_to_db()
