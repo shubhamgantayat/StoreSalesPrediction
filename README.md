@@ -27,8 +27,17 @@ The model is updated as per the admin so that it remains updated as per the late
 > Go inside the StoreSalesPrediction folder
 > Run on cmd - python main.py
 
+# Visit my site at - http://flaskapp-env.eba-3eqwxaha.ap-south-1.elasticbeanstalk.com/
+
+# Important Documents
+HLD - https://github.com/shubhamgantayat/StoreSalesPrediction/blob/main/documents/HLD.docx , 
+LLD - https://github.com/shubhamgantayat/StoreSalesPrediction/blob/main/documents/LLD.docx , 
+Software Architecture - https://github.com/shubhamgantayat/StoreSalesPrediction/blob/main/documents/Software%20Architecture%20Document.docx , 
+Wireframe - https://github.com/shubhamgantayat/StoreSalesPrediction/blob/main/documents/wireframe.docx , 
+Detailed Project Report - https://github.com/shubhamgantayat/StoreSalesPrediction/blob/main/documents/Detailed%20Report.pptx
+
 # For feedback - 
 Shubham Gantayat - sgantayat9@gmail.com
 
-# Visit our LinkedIn profiles at -
+# Visit my LinkedIn profile at -
 Shubham Gantayat - https://www.linkedin.com/in/shubham-gantayat-4617521b7/
