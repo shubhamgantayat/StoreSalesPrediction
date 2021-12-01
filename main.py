@@ -130,7 +130,7 @@ def predict_data():
             }
             config.logger.log("INFO", os.getcwd())
             config.logger.log("INFO", os.listdir())
-            folder_path = 'prediction_raw_files/'
+            folder_path = 'prediction_raw_files'
             filename = 'prediction_raw_data_' + str(datetime.datetime.now().strftime("%Y%m%d%H%M%S")) + ".csv"
             filepath = os.path.join(folder_path, filename)
             filepath = folder_path + "//" + filename
