@@ -26,13 +26,6 @@ dashboard.bind(app)
 CORS(app)
 config.logger = Logger()
 config.mongo_db = Operations("StoreSalesPrediction", config.logger)
-os.mkdir('training_raw_files')
-os.mkdir('training_batch_files')
-os.mkdir('training_invalid_files')
-os.mkdir('prediction_raw_files')
-os.mkdir('prediction_batch_files')
-os.mkdir('prediction_invalid_files')
-os.mkdir('predictions')
 
 
 @app.route('/', methods=['GET'])
@@ -142,6 +135,7 @@ def predict_data():
             filepath = os.path.join(folder_path, filename)
             test_data = pd.DataFrame.from_dict(data)
             test_data.to_csv(filepath, index=False)
+            # test_data.to_csv(filename, index=False)
             config.logger.log("INFO", str(os.listdir(filepath)))
             validation_response = PredictionDataValidation(filename).check_columns()
             if validation_response['status'] == 'Success':
@@ -163,6 +157,13 @@ def predict_data():
 
 if __name__ == '__main__':
     config.logger.log("INFO", "App starting...")
+    os.mkdir('training_raw_files')
+    os.mkdir('training_batch_files')
+    os.mkdir('training_invalid_files')
+    os.mkdir('prediction_raw_files')
+    os.mkdir('prediction_batch_files')
+    os.mkdir('prediction_invalid_files')
+    os.mkdir('predictions')
     host = '0.0.0.0'
     port = int(os.getenv("PORT", 5000))
     app.run(host=host, port=port, debug=True)
