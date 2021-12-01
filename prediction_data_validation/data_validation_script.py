@@ -7,6 +7,10 @@ import json
 class PredictionDataValidation:
 
     def __init__(self, filename):
+        """
+
+        :param filename: filename of the raw data file.
+        """
         try:
             folder_path = 'prediction_raw_files'
             with open('master_data_management/prediction_schema.json', 'r') as f:
@@ -25,6 +29,10 @@ class PredictionDataValidation:
             config.logger.log("ERROR", str(e))
 
     def check_columns(self):
+        """
+
+        :return: filename of the batch file if check was successful else filename of the invalid file
+        """
         try:
             test_data = pd.read_csv(self.filepath)
             os.remove(self.filepath)

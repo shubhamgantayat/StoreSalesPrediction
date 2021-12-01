@@ -7,10 +7,18 @@ import os
 class PredictionDataIngestion:
 
     def __init__(self, file):
+        """
+
+        :param file: raw file for data ingestion provided from frontend
+        """
         self.folder_path = 'prediction_raw_files'
         self.file = file
 
     def save_raw_data(self):
+        """
+
+        :return: Filename where raw data is saved
+        """
         try:
             filename = 'prediction_raw_data_' + str(datetime.datetime.now().strftime("%Y%m%d%H%M%S")) + ".csv"
             filepath = os.path.join(self.folder_path, filename)

@@ -1,6 +1,5 @@
 import pandas as pd
 from flask import Flask, request, render_template, send_file
-from wsgiref import simple_server
 import os
 import flask_monitoringdashboard as dashboard
 from flask_cors import CORS, cross_origin
@@ -18,7 +17,9 @@ from prediction_data_ingestion.data_ingestion_script import PredictionDataIngest
 from prediction_data_validation.data_validation_script import PredictionDataValidation
 from prediction_db_upload.db_upload_script import PredictionDBUpload
 import datetime
-import tempfile
+import string
+import random
+from file_deleter.file_deleter_script import FileDeleter
 
 app = Flask(__name__)
 dashboard.bind(app)
@@ -97,10 +98,11 @@ def predict():
                             if predict_response['status'] == "Success":
                                 pred = predict_response['pred']
                                 df = pd.DataFrame().from_dict({"Item_Outlet_Sales": pred})
-                                # temp = tempfile.NamedTemporaryFile(suffix='.csv', dir='predictions/')
-                                df.to_csv('predictions/file.csv', index=False)
-                                # df.to_csv(temp.name, index=False)
-                                return send_file('predictions/file.csv')
+                                filename = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10)) + ".csv"
+                                filepath = os.path.join('predictions', filename)
+                                df.to_csv(filepath, index=False)
+                                Thread(target=FileDeleter(filepath).delete_file).start()
+                                return send_file(filepath)
         return render_template("home_page.html", results="Prediction Unsuccessful")
     except Exception as e:
         config.logger.log("ERROR", str(e))
@@ -153,8 +155,6 @@ if __name__ == '__main__':
     config.logger.log("INFO", "App starting...")
     host = '0.0.0.0'
     port = int(os.getenv("PORT", 5000))
-    # httpd = simple_server.make_server(host=host, port=port, app=app)
-    # httpd.serve_forever()
     app.run(host=host, port=port, debug=True)
 
 

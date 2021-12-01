@@ -14,10 +14,20 @@ from mail_automation.mail import SendMail
 class ModelFinder:
 
     def __init__(self):
+        """
+        This class is used to find the best hyperparameters for the machine learning model.
+        """
         self.scaler_path = os.path.join("models", "scaler.pkl")
         self.model_path = os.path.join("models", "xgboost_model.pkl")
 
     def fit(self, X, y, email):
+        """
+
+        :param X: feature variable
+        :param y: labels/values
+        :param email: email for notifying
+        :return: status of the job
+        """
         try:
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
             study = optuna.create_study(direction='maximize')
@@ -54,6 +64,11 @@ class ModelFinder:
             return {"status": "Failure"}
 
     def predict(self, X):
+        """
+
+        :param X: feature variable
+        :return: prediction result
+        """
         try:
             if os.path.exists(self.scaler_path):
                 preprocessing = joblib.load(self.scaler_path)

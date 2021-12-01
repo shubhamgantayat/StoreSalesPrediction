@@ -7,6 +7,11 @@ import pandas as pd
 class PredictionDBUpload:
 
     def __init__(self, filename, filetype):
+        """
+
+        :param filename: name of the file after data validation check
+        :param filetype: valid/ invalid
+        """
         self.filename = filename
         if filetype == 'invalid':
             folder_path = 'prediction_invalid_files'
@@ -17,6 +22,10 @@ class PredictionDBUpload:
         self.filepath = os.path.join(folder_path, self.filename)
 
     def upload_to_db(self):
+        """
+
+        :return: table name after uploading to database.
+        """
         try:
             df = pd.read_csv(self.filepath)
             os.remove(self.filepath)

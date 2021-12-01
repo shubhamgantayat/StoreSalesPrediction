@@ -5,9 +5,17 @@ import pandas as pd
 class DBFetch:
 
     def __init__(self, table_name):
+        """
+        This class is used to fetch data from mongo db.
+        :param table_name: name of the table.
+        """
         self.table_name = table_name
 
     def fetch_data_from_db(self):
+        """
+
+        :return: Fetched data
+        """
         try:
             table = config.mongo_db.my_db[self.table_name]
             records = []

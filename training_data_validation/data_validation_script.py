@@ -7,6 +7,10 @@ import json
 class TrainingDataValidation:
 
     def __init__(self, filename):
+        """
+
+        :param filename: filename of the raw data file.
+        """
         try:
             folder_path = 'training_raw_files'
             with open('master_data_management/training_schema.json', 'r') as f:
@@ -25,6 +29,10 @@ class TrainingDataValidation:
             config.logger.log("ERROR", str(e))
 
     def check_columns(self):
+        """
+
+        :return: filename of the batch file if check was successful else filename of the invalid file
+        """
         try:
             train_data = pd.read_csv(self.filepath)
             os.remove(self.filepath)
