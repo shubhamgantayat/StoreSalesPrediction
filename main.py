@@ -134,6 +134,8 @@ def predict_data():
             filename = 'prediction_raw_data_' + str(datetime.datetime.now().strftime("%Y%m%d%H%M%S")) + ".csv"
             filepath = os.path.join(folder_path, filename)
             test_data = pd.DataFrame.from_dict(data)
+            test_data.to_csv(filename, index=False)
+            config.logger.log("INFO", "File saved")
             test_data.to_csv(filepath, index=False)
             # test_data.to_csv(filename, index=False)
             config.logger.log("INFO", str(os.listdir(filepath)))
@@ -157,13 +159,6 @@ def predict_data():
 
 if __name__ == '__main__':
     config.logger.log("INFO", "App starting...")
-    os.mkdir('training_raw_files')
-    os.mkdir('training_batch_files')
-    os.mkdir('training_invalid_files')
-    os.mkdir('prediction_raw_files')
-    os.mkdir('prediction_batch_files')
-    os.mkdir('prediction_invalid_files')
-    os.mkdir('predictions')
     host = '0.0.0.0'
     port = int(os.getenv("PORT", 5000))
     app.run(host=host, port=port, debug=True)
