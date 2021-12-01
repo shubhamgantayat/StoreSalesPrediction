@@ -128,6 +128,8 @@ def predict_data():
                 "Outlet_Location_Type": [request.form["Outlet_Location_Type"]],
                 "Outlet_Type": [request.form["Outlet_Type"]]
             }
+            config.logger.log("INFO", os.getcwd())
+            config.logger.log("INFO", os.listdir())
             folder_path = 'prediction_raw_files'
             filename = 'prediction_raw_data_' + str(datetime.datetime.now().strftime("%Y%m%d%H%M%S")) + ".csv"
             filepath = os.path.join(folder_path, filename)
