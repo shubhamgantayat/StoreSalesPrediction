@@ -26,6 +26,13 @@ dashboard.bind(app)
 CORS(app)
 config.logger = Logger()
 config.mongo_db = Operations("StoreSalesPrediction", config.logger)
+os.mkdir('training_raw_files')
+os.mkdir('training_batch_files')
+os.mkdir('training_invalid_files')
+os.mkdir('prediction_raw_files')
+os.mkdir('prediction_batch_files')
+os.mkdir('prediction_invalid_files')
+os.mkdir('predictions')
 
 
 @app.route('/', methods=['GET'])
