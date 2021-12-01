@@ -131,8 +131,8 @@ def predict_data():
             config.logger.log("INFO", os.getcwd())
             config.logger.log("INFO", os.listdir())
             folder_path = 'prediction_raw_files'
-            filepath = folder_path + '/' + 'prediction_raw_data_' + str(datetime.datetime.now().strftime("%Y%m%d%H%M%S")) + ".csv"
-            # filepath = os.path.join(folder_path, filename)
+            filename = 'prediction_raw_data_' + str(datetime.datetime.now().strftime("%Y%m%d%H%M%S")) + ".csv"
+            filepath = folder_path + '/' + filename
             test_data = pd.DataFrame.from_dict(data)
             # test_data.to_csv(filename, index=False)
             config.logger.log("INFO", "File saved")
