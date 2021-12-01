@@ -4,7 +4,7 @@ The Store Sales Prediction Application predicts the sales of different products 
 # Problem Statement
 Nowadays, shopping malls and Big Marts keep track of individual item sales data in order to forecast future client demand and adjust inventory management. In a data warehouse, these data stores hold a significant amount of consumer information and particular item details. By mining the data store from the data warehouse, more anomalies and common patterns can be discovered.
 
-# Proposed SOlution
+# Proposed Solution
 The solution proposed here is a Store Sales Prediction Web Application that allows user to predict store sales based on Item and Outlet Data using machine learning. 
 The model is updated as per the admin so that it remains updated as per the latest store sales data. 
 
