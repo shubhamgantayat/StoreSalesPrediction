@@ -72,15 +72,30 @@ class ModelFinder:
         try:
             if os.path.exists(self.scaler_path):
                 preprocessing = joblib.load(self.scaler_path)
-                X_tf = preprocessing.transform_data(X)
-                if os.path.exists(self.model_path):
+                if len(X) < 3000:
+                    X_tf = preprocessing.transform_data(X)
+                    if os.path.exists(self.model_path):
+                        model = joblib.load(self.model_path)
+                        pred = model.predict(X_tf)
+                        config.logger.log("INFO", "Prediction Successful")
+                        return {"status": "Success", "pred": pred}
+                    else:
+                        config.logger.log("ERROR", "Model Not Found")
+                        return {"status": "Failure", "pred": None}
+                else:
+                    prev = 0
+                    pred = np.array([])
+                    for i in range(3000, len(X) + 1, 3000):
+                        X_tf = preprocessing.transform_data(X.iloc[prev:i])
+                        prev = i
+                        if os.path.exists(self.model_path):
+                            model = joblib.load(self.model_path)
+                            pred = np.r_[pred, model.predict(X_tf)]
                     model = joblib.load(self.model_path)
-                    pred = model.predict(X_tf)
+                    X_tf = preprocessing.transform_data(X.iloc[prev:])
+                    pred = np.r_[pred, model.predict(X_tf)]
                     config.logger.log("INFO", "Prediction Successful")
                     return {"status": "Success", "pred": pred}
-                else:
-                    config.logger.log("ERROR", "Model Not Found")
-                    return {"status": "Failure", "pred": None}
             else:
                 config.logger.log("ERROR", "Scaler not found")
                 return {"status": "Failure", "pred": None}
