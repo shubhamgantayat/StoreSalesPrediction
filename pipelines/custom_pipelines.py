@@ -18,7 +18,7 @@ class CustomPipeline:
         """
         cat_attributes = ['Item_Type', 'Outlet_Location_Type', 'Outlet_Type', 'Item_Fat_Content']
         num_attributes = ['Item_Weight', 'Item_Visibility', 'Item_MRP']
-        cat_attributes_2 = ['Outlet_Size']
+        cat_attributes_2 = ['Outlet_Size', 'Outlet_Identifier']
         col_tf = ColumnTransformer([
             ("standard_scaler", StandardScaler(), num_attributes),
             ("one_hot", OneHotEncoder(), cat_attributes),
@@ -36,7 +36,7 @@ class CustomPipeline:
         pipeline = Pipeline([
             ("col_filter", ColumnFilter()),
             ("col_transformer", CustomPipeline().column_pipeline()),
-            ("sparse", SparseToMatrixTransformer()),
+            # ("sparse", SparseToMatrixTransformer()),
             ('knn_imputer', KNNImputer(n_neighbors=n_neighbors))
         ])
         return pipeline
